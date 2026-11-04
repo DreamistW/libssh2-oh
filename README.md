@@ -1,7 +1,7 @@
 # libssh2-oh
 
 基于 libssh2 1.11.1 的 HarmonyOS 移植，使用原创 OHCRYPTO 后端调用系统
-`libohcrypto.so`。HAR 版本为 `0.1.0`，目标为 API 26、arm64-v8a、2in1。
+`libohcrypto.so`。HAR 版本为 `0.1.0`，最低兼容版本为 API 23，编译目标为 API 26、arm64-v8a、2in1。
 
 源码仓库：[DreamistW/libssh2-oh](https://github.com/DreamistW/libssh2-oh)。
 

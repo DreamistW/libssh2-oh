@@ -48,8 +48,10 @@ Demo HAP 位于 `demo/entry/build/default/outputs/default`，安装运行前需�
 运行和签名流程见 [demo/README.md](demo/README.md)，HAR 安装及调用见
 [library/README.md](library/README.md)。
 
+## GitHub Release
+
+将与库版本一致的稳定标签（例如 `v0.1.0`）推送到 GitHub 后，Actions 构建 HAR 并将 HAR 和 SHA-256 校验文件发布为 Latest Release。首次使用需在仓库注册两台带有 `harmony-api26` 标签的自托管 runner：Linux x64 配置上述原生工具链，Windows x64 配置上述 HAR 构建环境。两者均需设置 `DEVECO_CLI_CLT_PATH`。
+
 ## 许可
 
 原创后端及构建脚本使用 Apache-2.0；libssh2 使用 BSD-3-Clause，完整许可及归属声明随包提供。
-本包不分发 OpenSSL、Mbed TLS 或系统 CryptoFramework 实现。
-构建脚本不执行 OHPM 发布。参考 [OHPM 创建及发布指引](https://ohpm.openharmony.cn/#/cn/help/createandpublish)。

@@ -1,0 +1,65 @@
+name: Publish HAR
+on:
+  push:
+    tags: ['v[0-9]*.[0-9]*.[0-9]*']
+permissions:
+  contents: read
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check stable tag against package version
+        run: |
+          [[ "$GITHUB_REF_NAME" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]
+          test "$GITHUB_REF_NAME" = "v$(jq -r .version library/oh-package.json5)"
+  native:
+    needs: version
+    runs-on: [self-hosted, linux, x64, harmony-api26]
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/build-native.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native
+          path: native/prebuilt/arm64-v8a/
+          if-no-files-found: error
+          overwrite: true
+  har:
+    needs: native
+    runs-on: [self-hosted, windows, x64, harmony-api26]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: native
+          path: native/prebuilt/arm64-v8a
+      - shell: powershell
+        run: ./scripts/build-har.ps1 -BuildMode release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-har
+          path: |
+            dist/*.har
+            dist/*.har.sha256
+          if-no-files-found: error
+          overwrite: true
+  release:
+    needs: har
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-har
+      - name: Publish Latest Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          asset="libssh2-oh-${GITHUB_REF_NAME#v}.har"
+          sha256sum -c "$asset.sha256"
+          gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --verify-tag --latest --generate-notes "$asset" "$asset.sha256"

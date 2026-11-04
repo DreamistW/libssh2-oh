@@ -1,6 +1,7 @@
 name: Publish HAR
 on:
   push:
+    branches: [main]
     tags: ['v[0-9]*.[0-9]*.[0-9]*']
 permissions:
   contents: read
@@ -13,41 +14,47 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Check stable tag against package version
+        if: github.ref_type == 'tag'
         run: |
           [[ "$GITHUB_REF_NAME" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]
           test "$GITHUB_REF_NAME" = "v$(jq -r .version library/oh-package.json5)"
-  native:
-    needs: version
-    runs-on: [self-hosted, linux, x64, harmony-api26]
-    steps:
-      - uses: actions/checkout@v4
-      - run: python3 scripts/build-native.py
-      - uses: actions/upload-artifact@v4
-        with:
-          name: native
-          path: native/prebuilt/arm64-v8a/
-          if-no-files-found: error
-          overwrite: true
   har:
-    needs: native
-    runs-on: [self-hosted, windows, x64, harmony-api26]
+    needs: version
+    runs-on: ubuntu-24.04
+    container:
+      image: ghcr.io/dalongzhuazi/harmonyos-ci@sha256:07433d62987065c0423025abeeb9ae35eabd21f7394b109ae6c9d74e679c41b1
+    env:
+      DEVECO_CLI_CLT_PATH: /opt/command-line-tools
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
         with:
-          name: native
-          path: native/prebuilt/arm64-v8a
-      - shell: powershell
-        run: ./scripts/build-har.ps1 -BuildMode release
+          persist-credentials: false
+      - name: Install native build prerequisites
+        run: |
+          command -v patch || (apt-get update && apt-get install -y --no-install-recommends patch)
+          grep -Eq '^apiVersion[[:space:]]*:[[:space:]]*26' "$DEVECO_CLI_CLT_PATH/version.txt"
+      - name: Compile arm64-v8a library
+        run: |
+          python3 scripts/build-native.py
+          python3 scripts/prepare.py
+      - name: Build and verify release HAR
+        run: |
+          ohpm install --all
+          hvigorw assembleHar --mode module -p module=libssh2_oh@default -p product=default -p buildMode=release --no-daemon --stacktrace
+          version=$(python3 -c "import json; print(json.load(open('library/oh-package.json5'))['version'])")
+          mkdir -p dist
+          asset="libssh2-oh-$version.har"
+          cp library/build/default/outputs/default/libssh2_oh.har "dist/$asset"
+          python3 scripts/prepare.py --verify-har "dist/$asset"
+          (cd dist && sha256sum "$asset" > "$asset.sha256")
       - uses: actions/upload-artifact@v4
         with:
           name: release-har
-          path: |
-            dist/*.har
-            dist/*.har.sha256
+          path: dist/
           if-no-files-found: error
           overwrite: true
   release:
+    if: github.ref_type == 'tag'
     needs: har
     runs-on: ubuntu-latest
     permissions:

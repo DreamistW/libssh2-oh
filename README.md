@@ -50,7 +50,7 @@ Demo HAP 位于 `demo/entry/build/default/outputs/default`，安装运行前需�
 
 ## GitHub Release
 
-将与库版本一致的稳定标签（例如 `v0.1.0`）推送到 GitHub 后，Actions 构建 HAR 并将 HAR 和 SHA-256 校验文件发布为 Latest Release。首次使用需在仓库注册两台带有 `harmony-api26` 标签的自托管 runner：Linux x64 配置上述原生工具链，Windows x64 配置上述 HAR 构建环境。两者均需设置 `DEVECO_CLI_CLT_PATH`。
+将与库版本一致的稳定标签（例如 `v0.1.0`）推送到 GitHub 后，Actions 构建 HAR 并将 HAR 和 SHA-256 校验文件发布为 Latest Release。GitHub 托管的 Ubuntu runner 自动拉取按摘要固定的社区工具链镜像（HarmonyOS API 26，CLT 26.0.0.821），编译原生库并校验 HAR。推送 main 会先执行相同构建。
 
 ## 许可
 

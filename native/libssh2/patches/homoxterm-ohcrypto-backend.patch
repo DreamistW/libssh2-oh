@@ -1,0 +1,70 @@
+From: HomoXterm contributors
+Subject: [PATCH] add HarmonyOS CryptoFramework backend selection
+
+The backend implementation is maintained in the HomoXterm source tree and is
+copied into src/ before this integration patch is applied.
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -292,11 +292,21 @@
+-set(CRYPTO_BACKEND "" CACHE
+-  STRING "The backend to use for cryptography: OpenSSL, wolfSSL, Libgcrypt, WinCNG, mbedTLS, or empty to try any available")
++set(CRYPTO_BACKEND "" CACHE
++  STRING "The backend to use for cryptography: OHCRYPTO, OpenSSL, wolfSSL, Libgcrypt, WinCNG, mbedTLS, or empty to try any available")
+ 
+ # If the crypto backend was given, rather than searching for the first
+ # we are able to find, the find_package commands must abort configuration
+ # and report to the user.
+ if(CRYPTO_BACKEND)
+   set(_specific_crypto_requirement "REQUIRED")
+ endif()
+ 
++if(CRYPTO_BACKEND STREQUAL "OHCRYPTO")
++  if(CMAKE_SYSTEM_NAME STREQUAL "OHOS")
++    set(CRYPTO_BACKEND_DEFINE "LIBSSH2_OHCRYPTO")
++    set(CRYPTO_BACKEND_INCLUDE_DIR "")
++    list(APPEND LIBSSH2_LIBS "libohcrypto.so")
++  else()
++    message(FATAL_ERROR "OHCRYPTO is only available with the OHOS toolchain")
++  endif()
++endif()
++
+ if(CRYPTO_BACKEND STREQUAL "OpenSSL" OR NOT CRYPTO_BACKEND)
+--- a/src/crypto.h
++++ b/src/crypto.h
+@@ -44,2 +44,4 @@
+-#if defined(LIBSSH2_OPENSSL) || defined(LIBSSH2_WOLFSSL)
++#if defined(LIBSSH2_OHCRYPTO)
++#include "ohcrypto.h"
++#elif defined(LIBSSH2_OPENSSL) || defined(LIBSSH2_WOLFSSL)
+ #include "openssl.h"
+--- a/src/crypto.c
++++ b/src/crypto.c
+@@ -9,2 +9,4 @@
+-#if defined(LIBSSH2_OPENSSL) || defined(LIBSSH2_WOLFSSL)
++#if defined(LIBSSH2_OHCRYPTO)
++#include "ohcrypto.c"
++#elif defined(LIBSSH2_OPENSSL) || defined(LIBSSH2_WOLFSSL)
+ #include "openssl.c"
+--- a/src/Makefile.inc
++++ b/src/Makefile.inc
+@@ -42,3 +42,4 @@
+   mbedtls.h             \
+   misc.h                \
++  ohcrypto.h            \
+   openssl.h             \
+@@ -58,3 +59,4 @@
+   libgcrypt.c           \
+   mbedtls.c             \
++  ohcrypto.c            \
+   openssl.c             \
+--- a/include/libssh2.h
++++ b/include/libssh2.h
+@@ -1081,7 +1081,8 @@ typedef enum {
+     libssh2_gcrypt,
+     libssh2_mbedtls,
+     libssh2_wincng,
+-    libssh2_os400qc3
++    libssh2_os400qc3,
++    libssh2_ohcrypto
+ } libssh2_crypto_engine_t;

@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-11-04",
+  "libssh2": {
+    "version": "1.11.1",
+    "tag": "libssh2-1.11.1",
+    "commit": "a312b43325e3383c865a87bb1d26cb52e3292641",
+    "archive": {
+      "url": "https://libssh2.org/download/libssh2-1.11.1.tar.xz",
+      "sha256": "9954cb54c4f548198a7cbebad248bdc87dd64bd26185708a294b2b50771e3769"
+    },
+    "license": "BSD-3-Clause",
+    "securityPatchSource": {
+      "name": "Debian libssh2 1.11.1 patch queue",
+      "revision": "22a10fa8d045b5fe3ae5d37532c046ff6ef108a3"
+    },
+    "securityPatches": [
+      {
+        "file": "cve-2026-7598.patch",
+        "commit": "256d04b60d80bf1190e96b0ad1e91b2174d744b1",
+        "sha256": "22cd854cbdec8ea898fcdd5b473c2bf6522c369c4e7f981aced24ab20def8137"
+      },
+      {
+        "file": "CVE-2025-15661.patch",
+        "commit": "2dae3024897e1898d389835151f4e9606227721d",
+        "sha256": "473ea2ffcf3509b39b5037196dc3e58153da2a2cd2a7a6514dd989349f472c71"
+      },
+      {
+        "file": "CVE-2026-55199.patch",
+        "commit": "17626857d20b3c9a1addfa45979dadcee1cd84a4",
+        "sha256": "00565ae64a2185aeb6684d227f9724980749d1364d7237cfdf6c83ce7a0484da"
+      },
+      {
+        "file": "CVE-2026-55200.patch",
+        "commit": "97acf3dfda80c91c3a8c9f2372546301d4a1a7a8",
+        "sha256": "c0202096bf01b015888678774a215ec8acd9988a7cac2e4c55f160a04ce9fe11"
+      },
+      {
+        "file": "libssh-unconst-backport.patch",
+        "commit": "606c102e52f8447de2b745dd6c5ddf418defc519",
+        "sha256": "8dcd3515bef419b683f7e4587928d168b141b4a2e230f4ccb976acdb5682d008"
+      },
+      {
+        "file": "CVE-2026-66032.patch",
+        "commit": "5e4776146552d898b9c0e1b313cd093fa8dc92d0",
+        "sha256": "1fa55785573bb821718ff9375e8bb283ef06629b27ffd21e71766b3e4cec824b"
+      },
+      {
+        "file": "CVE-2026-66033.patch",
+        "commit": "a2ed82d40964bbc0d64cd717aa0a5a892117d2e6",
+        "sha256": "4e8dae97d89b680927d0158dbbb7d46e96aa1ea117fa3b94b016e303404617ab"
+      },
+      {
+        "file": "CVE-2026-66034.patch",
+        "commit": "a13bb6c773f0d55ad1628cede57e99803cd898d9",
+        "sha256": "c5883daa1f3b2a5131237f2c9c0ab9139845e75988a1a275c0e5fd7b5b847669"
+      },
+      {
+        "file": "CVE-2026-66035.patch",
+        "commit": "42e33d81577ed4b95d4b4f6f845e5ee8efe5eeb4",
+        "sha256": "f96afd769fa0df8ee980a689611351c7e1171c0de238a80e3b8b63c62ef3903f"
+      },
+      {
+        "file": "CVE-2026-58050.patch",
+        "commit": "34497525929b9a47f03dfb81887ac896202b7e12",
+        "sha256": "e05eb89d9bfcc6dd93a769a9beb87b05eccd0a1ce801e8cf729ef0bd05fd2ef6"
+      },
+      {
+        "file": "CVE-2026-58051.patch",
+        "commit": "32092f0d310f4d769e5ed073ad5987f997f446dc",
+        "sha256": "cc733a4e67d45e2a9eecef00a4c054d1db7a72a34607ca08324a80e99a1ca31b"
+      }
+    ],
+    "projectPatches": [
+      {
+        "file": "homoxterm-sensitive-buffer-zero.patch",
+        "purpose": "clear decrypted private-key and keyboard-interactive buffers before release",
+        "sha256": "c690e45ec3727836dcf698692da6959b30af991486430d74cc31e76b60c3706f"
+      },
+      {
+        "file": "homoxterm-ohcrypto-backend.patch",
+        "purpose": "wire the first-party LIBSSH2_OHCRYPTO backend into libssh2",
+        "sha256": "1ef71c1324d78674c4c1c8503c426904820bc78d3c3c0eda5d446779cb9bf9da"
+      },
+      {
+        "file": "homoxterm-rsa-sha2-wire-key.patch",
+        "purpose": "accept the ssh-rsa public-key wire format independently of SHA-1 signatures",
+        "sha256": "561241e430880b23a88d78dd1ec54008abe3780cca64a56548ffdda9372260dd"
+      },
+      {
+        "file": "homoxterm-ohcrypto-gcm.patch",
+        "purpose": "authenticate complete OpenSSH AES-GCM packets with OHCRYPTO",
+        "sha256": "d2dce0ceaef1d7f9484945d2f3eb0c3e5587a01a8b3c38385bfa294b32e50e53"
+      }
+    ],
+    "ohosBuild": {
+      "abi": "arm64-v8a",
+      "api": 26,
+      "cryptoBackend": "OHCRYPTO",
+      "sharedLibrary": false,
+      "examples": false,
+      "tests": false,
+      "zlib": false
+    }
+  },
+  "cryptoFramework": {
+    "api": 26,
+    "library": "libohcrypto.so",
+    "bundledThirdPartyCrypto": false
+  }
+}

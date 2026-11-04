@@ -1,0 +1,35 @@
+From: HomoXterm contributors
+Subject: [PATCH] clear sensitive authentication buffers before release
+
+OpenSSH private-key parsing uses string_buf for decrypted key material, and
+keyboard-interactive responses remain in both callback and packet buffers.
+Use libssh2's existing explicit-zero primitive before those allocations are
+returned to the allocator.
+
+--- a/src/misc.c
++++ b/src/misc.c
+@@ -831,2 +831,4 @@
+-    if(buf->data)
++    if(buf->data) {
++        _libssh2_explicit_zero(buf->data, buf->len);
+         LIBSSH2_FREE(session, buf->data);
++    }
+--- a/src/userauth.c
++++ b/src/userauth.c
+@@ -2335,2 +2335,6 @@ cleanup:
++        if(session->userauth_kybd_data) {
++            _libssh2_explicit_zero(session->userauth_kybd_data,
++                                   session->userauth_kybd_packet_len);
++        }
+         LIBSSH2_FREE(session, session->userauth_kybd_data);
+         session->userauth_kybd_data = NULL;
+@@ -2345,4 +2349,9 @@ cleanup:
+         if(session->userauth_kybd_responses) {
+             for(i = 0; i < session->userauth_kybd_num_prompts; i++) {
++                if(session->userauth_kybd_responses[i].text) {
++                    _libssh2_explicit_zero(
++                        session->userauth_kybd_responses[i].text,
++                        session->userauth_kybd_responses[i].length);
++                }
+                 LIBSSH2_FREE(session,
+                              session->userauth_kybd_responses[i].text);

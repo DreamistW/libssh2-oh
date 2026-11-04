@@ -1,0 +1,10 @@
+libssh2-oh
+Copyright 2026 HomoXterm contributors
+
+The original OHCRYPTO backend and packaging code use Apache-2.0.
+libssh2 1.11.1 and its upstream security fixes use BSD-3-Clause.
+The complete license texts and these notices are combined in LICENSE.
+
+Cryptographic operations use the HarmonyOS system libohcrypto.so.
+CryptoFramework, the HarmonyOS SDK, OpenSSL and Mbed TLS are not distributed
+in this package. This port is maintained independently of the libssh2 project.

@@ -1,0 +1,6 @@
+{
+  "modelVersion": "26.0.0",
+  "description": "libssh2-oh HAR build workspace",
+  "dependencies": {},
+  "devDependencies": {}
+}

@@ -1,0 +1,7 @@
+{
+  "module": {
+    "name": "libssh2_oh",
+    "type": "har",
+    "deviceTypes": ["2in1"]
+  }
+}

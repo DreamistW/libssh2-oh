@@ -1,0 +1,8 @@
+{
+  "name": "libssh2-oh-demo",
+  "version": "0.1.0",
+  "dependencies": {
+    "libssh2-oh": "file:../../dist/libssh2-oh-0.1.0.har",
+    "libohdemo.so": "file:./src/main/cpp/types/libohdemo"
+  }
+}

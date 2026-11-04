@@ -1,0 +1,12 @@
+{
+  "name": "libssh2-oh",
+  "version": "0.1.0",
+  "description": "libssh2 1.11.1 for HarmonyOS with the system OHCRYPTO backend",
+  "main": "Index.ets",
+  "author": { "name": "yume", "email": "yume.w@outlook.com" },
+  "license": "Apache-2.0 AND BSD-3-Clause",
+  "sourceType": "open",
+  "repository": "https://github.com/DreamistW/libssh2-oh.git",
+  "keywords": ["libssh2", "ssh", "sftp", "scp", "ohcrypto", "native"],
+  "dependencies": {}
+}

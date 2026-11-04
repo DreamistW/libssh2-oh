@@ -1,0 +1,18 @@
+From: HomoXterm contributors
+Subject: [PATCH] accept ssh-rsa public blobs for RSA-SHA2 host keys
+
+RFC 8332 changes the negotiated signature algorithm to rsa-sha2-256 or
+rsa-sha2-512, but the RSA public-key blob remains encoded with the ssh-rsa
+key format from RFC 4253.  Do not tie acceptance of that public-key format
+to SHA-1 signature support.  LIBSSH2_RSA_SHA1 remains disabled by the
+OHCRYPTO backend.
+
+--- a/src/hostkey.c
++++ b/src/hostkey.c
+@@ -91,5 +91,5 @@ hostkey_method_ssh_rsa_init(LIBSSH2_SESSION * session,
+     /* we accept one of 3 header types */
+-#if LIBSSH2_RSA_SHA1
++#if LIBSSH2_RSA_SHA1 || LIBSSH2_RSA_SHA2
+     if(type_len == 7 && strncmp("ssh-rsa", (char *)type, 7) == 0) {
+         /* ssh-rsa */
+     }

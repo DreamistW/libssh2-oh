@@ -1,0 +1,71 @@
+--- a/src/crypt.c
++++ b/src/crypt.c
+@@ -144,15 +144,36 @@
+ #if LIBSSH2_AES_GCM
++#ifdef LIBSSH2_OHCRYPTO
++/* OHCRYPTO verifies the tag supplied at init before publishing plaintext. */
++static int
++ohcrypto_gcm_length(LIBSSH2_SESSION *session, unsigned int seqno,
++                    unsigned char *data, size_t size, unsigned int *len,
++                    void **abstract)
++{
++    (void)session;
++    (void)seqno;
++    (void)abstract;
++    if(size < 4)
++        return LIBSSH2_ERROR_DECRYPT;
++    *len = _libssh2_ntohu32(data);
++    return 0;
++}
++#define GCM_FLAGS LIBSSH2_CRYPT_FLAG_REQUIRES_FULL_PACKET
++#define GCM_LENGTH ohcrypto_gcm_length
++#else
++#define GCM_FLAGS (LIBSSH2_CRYPT_FLAG_INTEGRATED_MAC | LIBSSH2_CRYPT_FLAG_PKTLEN_AAD)
++#define GCM_LENGTH NULL
++#endif
+ static const LIBSSH2_CRYPT_METHOD libssh2_crypt_method_aes256_gcm = {
+     "aes256-gcm@openssh.com",
+     "",
+     16,                         /* blocksize */
+     12,                         /* initial value length */
+     32,                         /* secret length -- 32*8 == 256bit */
+     16,                         /* length of the authentication tag */
+-    LIBSSH2_CRYPT_FLAG_INTEGRATED_MAC | LIBSSH2_CRYPT_FLAG_PKTLEN_AAD,
++    GCM_FLAGS,
+     &crypt_init,
+-    NULL,
++    GCM_LENGTH,
+     &crypt_encrypt,
+     &crypt_dtor,
+     _libssh2_cipher_aes256gcm
+ };
+@@ -160,15 +181,15 @@
+ static const LIBSSH2_CRYPT_METHOD libssh2_crypt_method_aes128_gcm = {
+     "aes128-gcm@openssh.com",
+     "",
+     16,                         /* blocksize */
+     12,                         /* initial value length */
+     16,                         /* secret length -- 16*8 == 128bit */
+     16,                         /* length of the authentication tag */
+-    LIBSSH2_CRYPT_FLAG_INTEGRATED_MAC | LIBSSH2_CRYPT_FLAG_PKTLEN_AAD,
++    GCM_FLAGS,
+     &crypt_init,
+-    NULL,
++    GCM_LENGTH,
+     &crypt_encrypt,
+     &crypt_dtor,
+     _libssh2_cipher_aes128gcm
+ };
+ #endif
+--- a/src/transport.c
++++ b/src/transport.c
+@@ -1059,3 +1059,3 @@
+     if(encrypted && session->local.crypt &&
+-        CRYPT_FLAG_R(session, REQUIRES_FULL_PACKET)) {
++        CRYPT_FLAG_L(session, REQUIRES_FULL_PACKET)) {
+         auth_len = session->local.crypt->auth_len;
+@@ -1132,3 +1132,3 @@
+     crypt_offset = (etm || auth_len ||
+-                    (encrypted && CRYPT_FLAG_R(session, PKTLEN_AAD)))
++                    (encrypted && CRYPT_FLAG_L(session, PKTLEN_AAD)))
+                    ? 4 : 0;

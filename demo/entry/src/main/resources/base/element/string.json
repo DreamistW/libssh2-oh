@@ -1,0 +1,14 @@
+{ "string": [
+  { "name": "title", "value": "libssh2-oh Demo" },
+  { "name": "host", "value": "主机" },
+  { "name": "port", "value": "端口" },
+  { "name": "username", "value": "用户名" },
+  { "name": "password", "value": "密码" },
+  { "name": "fingerprint", "value": "主机密钥指纹 SHA256" },
+  { "name": "kex", "value": "密钥交换算法" },
+  { "name": "legacy", "value": "允许旧版 DH（SHA-1）" },
+  { "name": "run", "value": "运行" },
+  { "name": "running", "value": "正在运行" },
+  { "name": "passed", "value": "通过" },
+  { "name": "failed", "value": "失败" }
+] }

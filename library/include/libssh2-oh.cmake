@@ -4,7 +4,7 @@ if(TARGET libssh2-oh::ssh2)
 endif()
 
 if(NOT OHOS_ARCH STREQUAL "arm64-v8a")
-  message(FATAL_ERROR "libssh2-oh 0.1.0 supports arm64-v8a only")
+  message(FATAL_ERROR "libssh2-oh 0.1.1 supports arm64-v8a only")
 endif()
 
 get_filename_component(_libssh2_oh_root "${CMAKE_CURRENT_LIST_DIR}/.." ABSOLUTE)

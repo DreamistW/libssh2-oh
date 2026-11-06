@@ -1,6 +1,6 @@
 {
   "name": "libssh2-oh",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "libssh2 1.11.1 for HarmonyOS with the system OHCRYPTO backend",
   "main": "Index.ets",
   "author": { "name": "yume", "email": "yume.w@outlook.com" },

@@ -2,7 +2,7 @@ $ErrorActionPreference = 'Stop'
 $TaskRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..')).Path
 $TaskDemo = Join-Path $TaskRoot 'demo'
 $TaskManifestPath = Join-Path $TaskRoot 'library/include/libssh2-oh-manifest.json'
-if (-not (Test-Path -LiteralPath (Join-Path $TaskRoot 'dist/libssh2-oh-0.1.0.har')) -or
+if (-not (Test-Path -LiteralPath (Join-Path $TaskRoot 'dist/libssh2-oh-0.1.1.har')) -or
     -not (Test-Path -LiteralPath $TaskManifestPath)) {
     throw 'Build the library HAR with scripts/build-har.ps1 first'
 }

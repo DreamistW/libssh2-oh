@@ -43,10 +43,10 @@ if (-not (Test-Path -LiteralPath $TaskBuiltHar -PathType Leaf)) {
 }
 $TaskOutputDir = $OutputDirectory
 New-Item -ItemType Directory -Force -Path $TaskOutputDir | Out-Null
-$TaskOutput = Join-Path $TaskOutputDir 'libssh2-oh-0.1.0.har'
+$TaskOutput = Join-Path $TaskOutputDir 'libssh2-oh-0.1.1.har'
 Copy-Item -LiteralPath $TaskBuiltHar -Destination $TaskOutput -Force
 & python (Join-Path $PSScriptRoot 'prepare.py') --verify-har $TaskOutput
 if ($LASTEXITCODE -ne 0) { throw 'HAR content audit failed' }
 $TaskHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $TaskOutput).Hash.ToLowerInvariant()
-[IO.File]::WriteAllText(($TaskOutput + '.sha256'), ($TaskHash + '  libssh2-oh-0.1.0.har' + "`n"))
+[IO.File]::WriteAllText(($TaskOutput + '.sha256'), ($TaskHash + '  libssh2-oh-0.1.1.har' + "`n"))
 Get-FileHash -Algorithm SHA256 -LiteralPath $TaskOutput

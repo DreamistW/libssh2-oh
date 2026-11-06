@@ -1,7 +1,7 @@
 # libssh2-oh
 
 基于 libssh2 1.11.1 的 HarmonyOS 移植，使用原创 OHCRYPTO 后端调用系统
-`libohcrypto.so`。HAR 版本为 `0.1.0`，最低兼容版本为 API 23，编译目标为 API 26、arm64-v8a、2in1。
+`libohcrypto.so`。HAR 版本为 `0.1.1`，最低兼容版本为 API 23，编译目标为 API 26、arm64-v8a、2in1。
 
 源码仓库：[DreamistW/libssh2-oh](https://github.com/DreamistW/libssh2-oh)。
 
@@ -41,16 +41,20 @@ powershell -ExecutionPolicy Bypass -File scripts/build-har.ps1
 powershell -ExecutionPolicy Bypass -File scripts/build-demo.ps1
 ```
 
-HAR 位于 `dist/libssh2-oh-0.1.0.har`。打包时强制核对原生来源清单，导出三个公共头文件、
+HAR 位于 `dist/libssh2-oh-0.1.1.har`。打包时强制核对原生来源清单，导出三个公共头文件、
 静态库和 CMake 配置，保留完整许可并检查包内内容。产物与缓存均由 Git 忽略。
 
 Demo HAP 位于 `demo/entry/build/default/outputs/default`，安装运行前需在本机配置调试签名。
 运行和签名流程见 [demo/README.md](demo/README.md)，HAR 安装及调用见
 [library/README.md](library/README.md)。
 
+## 基本功能示例
+
+连接与密码认证、命令执行、PTY 和 SFTP 上传下载示例见 [使用说明](library/README.md#基本功能示例)。
+
 ## GitHub Release
 
-将与库版本一致的稳定标签（例如 `v0.1.0`）推送到 GitHub 后，Actions 构建 HAR 并将 HAR 和 SHA-256 校验文件发布为 Latest Release。GitHub 托管的 Ubuntu runner 自动拉取按摘要固定的社区工具链镜像（HarmonyOS API 26，CLT 26.0.0.821），编译原生库并校验 HAR。推送 main 会先执行相同构建。
+将与库版本一致的稳定标签（例如 `v0.1.1`）推送到 GitHub 后，Actions 构建 HAR 并将 HAR 和 SHA-256 校验文件发布为 Latest Release。GitHub 托管的 Ubuntu runner 自动拉取按摘要固定的社区工具链镜像（HarmonyOS API 26，CLT 26.0.0.821），编译原生库并校验 HAR。推送 main 会先执行相同构建。
 
 ## 许可
 

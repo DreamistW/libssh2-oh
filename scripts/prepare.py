@@ -67,7 +67,7 @@ def prepare(native: Path) -> None:
     subprocess.run([str(strip), "--strip-debug", str(libraries / "libssh2.a")], check=True)
 
     manifest = {
-        "name": "libssh2-oh", "version": "0.1.0",
+        "name": "libssh2-oh", "version": "0.1.1",
         "repository": "https://github.com/DreamistW/libssh2-oh.git",
         "inputFingerprint": fingerprint,
         "sourceTreeSha256": evidence["sourceTreeSha256"],
@@ -112,7 +112,7 @@ def audit_har(path: Path) -> None:
         if not files.get("package/" + name):
             raise ValueError(f"Missing or empty HAR file: {name}")
     package = json.loads(files["package/oh-package.json5"])
-    if package["name"] != "libssh2-oh" or package["version"] != "0.1.0":
+    if package["name"] != "libssh2-oh" or package["version"] != "0.1.1":
         raise ValueError("Incorrect package identity")
     if package.get("repository") != "https://github.com/DreamistW/libssh2-oh.git":
         raise ValueError("Incorrect public source repository")

@@ -1,7 +1,7 @@
 # Demo
 
 本目录是独立 Stage 应用工程，API 26、arm64-v8a、仅 2in1。
-`entry/oh-package.json5` 依赖 `../../dist/libssh2-oh-0.1.0.har`，不会直接编译库源码。
+`entry/oh-package.json5` 依赖 `../../dist/libssh2-oh-0.1.1.har`，不会直接编译库源码。
 
 先在仓库根目录构建库和 demo：
 
